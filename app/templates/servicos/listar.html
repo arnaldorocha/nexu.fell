@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %}Serviços{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-white d-flex justify-content-between align-items-center">
+            <h5 class="mb-0 fw-semibold" style="color: #a03e3e;">📄 Serviços</h5>
+            <a href="{{ url_for('novo_servico') }}" class="btn btn-sm" style="color: #a03e3e; border: 1px solid #a03e3e;">
+                <i class="fas fa-plus me-1"></i> Novo Serviço
+            </a>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                {% for servico in servicos %}
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card shadow-sm border-0 h-100">
+                        <div class="card-body">
+                            <h6 class="fw-semibold text-primary">{{ servico.nome }}</h6>
+                            <p class="text-muted">{{ servico.descricao }}</p>
+                            <p class="fw-bold text-success">R$ {{ servico.preco_padrao }}</p>
+                            <div class="d-flex justify-content-end gap-2">
+                                <a href="{{ url_for('editar_servico', id=servico.id) }}" class="btn btn-sm btn-outline-secondary">Editar</a>
+                                <a href="{{ url_for('excluir_servico', id=servico.id) }}" class="btn btn-sm btn-outline-danger" onclick="return confirm('Excluir este serviço?')">Excluir</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% else %}
+                <p class="text-muted ms-2">Nenhum serviço cadastrado.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

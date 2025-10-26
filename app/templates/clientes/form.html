@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ 'Editar' if cliente else 'Novo' }} Cliente{% endblock %}
+
+{% block content %}
+
+<div class="container mt-4" style="max-width: 600px;">
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-white border-0">
+            <h5 class="mb-0 fw-semibold" style="color: #a03e3e;">
+                {{ 'Editar' if cliente else 'Novo' }} Cliente
+            </h5>
+        </div>
+        <div class="card-body bg-white">
+            <form method="POST" class="fs-6">
+                <div class="mb-3">
+                    <label for="nome" class="form-label"><i class="fas fa-user me-1"></i> Nome</label>
+                    <input type="text" class="form-control" id="nome" name="nome" required value="{{ cliente.nome if cliente else '' }}">
+                </div>
+                <div class="mb-3">
+                    <label for="telefone" class="form-label"><i class="fas fa-phone me-1"></i> Telefone</label>
+                    <input type="text" class="form-control" id="telefone" name="telefone" value="{{ cliente.telefone if cliente else '' }}">
+                </div>
+                <div class="mb-3">
+                    <label for="email" class="form-label"><i class="fas fa-envelope me-1"></i> E-mail</label>
+                    <input type="email" class="form-control" id="email" name="email" value="{{ cliente.email if cliente else '' }}">
+                </div>
+                <div class="mb-3">
+                    <label for="observacoes" class="form-label"><i class="fas fa-sticky-note me-1"></i> Observações</label>
+                    <textarea class="form-control" id="observacoes" name="observacoes" rows="3">{{ cliente.observacoes if cliente else '' }}</textarea>
+                </div>
+                <div class="d-flex justify-content-between mt-4">
+                    <a href="{{ url_for('listar_clientes') }}" class="btn btn-secondary"  style="background-color: #a03e3e">Cancelar</a>
+                    <button type="submit" class="btn" style="background-color: #a03e3e; color: white;">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

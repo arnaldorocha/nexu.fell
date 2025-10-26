@@ -1,0 +1,10 @@
+<h1>{{ 'Editar' if produto else 'Novo' }} Produto</h1>
+<form method="POST">
+    <input name="nome" placeholder="Nome" value="{{ produto.nome if produto else '' }}"><br>
+    <input name="descricao" placeholder="Descrição" value="{{ produto.descricao if produto else '' }}"><br>
+    <input name="preco" placeholder="Preço" type="number" step="0.01" value="{{ produto.preco if produto else '' }}"><br>
+    <input name="quantidade" placeholder="Quantidade" type="number" value="{{ produto.quantidade if produto else '' }}"><br>
+    <input name="quantidade_minima" placeholder="Qtd. Mínima" type="number" value="{{ produto.quantidade_minima if produto else '' }}"><br>
+    <button type="submit">Salvar</button>
+</form>
+<a href="{{ url_for('listar_produtos') }}">Voltar</a>

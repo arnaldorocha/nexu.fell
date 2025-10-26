@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block title %}Relatórios{% endblock %}
+{% block content %}
+
+<div class="container mt-4" style="max-width: 750px;">
+  <div class="card shadow-sm border-0">
+    <div class="card-header bg-white">
+      <h5 class="mb-0 fw-semibold" style="color: #a03e3e;">📊 Relatórios em CSV</h5>
+    </div>
+    <div class="card-body">
+
+      <form method="get" class="row g-3 mb-4">
+        <div class="col-md-5">
+          <label for="data_inicio" class="form-label">Data Início</label>
+          <input type="date" name="data_inicio" class="form-control" value="{{ data_inicio }}">
+        </div>
+        <div class="col-md-5">
+          <label for="data_fim" class="form-label">Data Fim</label>
+          <input type="date" name="data_fim" class="form-control" value="{{ data_fim }}">
+        </div>
+        <div class="col-md-2 d-flex align-items-end">
+          <button type="submit" class="btn btn-outline-primary w-100">Filtrar</button>
+        </div>
+      </form>
+
+      <div class="d-grid gap-3">
+        <a href="{{ url_for('exportar_faturamento_csv', data_inicio=data_inicio, data_fim=data_fim) }}" class="btn btn-outline-primary">💰 Faturamento</a>
+        <a href="{{ url_for('exportar_servicos_csv', data_inicio=data_inicio, data_fim=data_fim) }}" class="btn btn-outline-success">💇‍♀️ Serviços Realizados</a>
+        <a href="{{ url_for('exportar_vendas_produtos_csv', data_inicio=data_inicio, data_fim=data_fim) }}" class="btn btn-outline-warning">📦 Vendas de Produtos</a>
+        <a href="{{ url_for('exportar_lucro_csv', data_inicio=data_inicio, data_fim=data_fim) }}" class="btn btn-outline-danger">📈 Lucro Real</a>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block title %}Fechar Caixa{% endblock %}
+{% block content %}
+<div class="container mt-4" style="max-width: 700px;">
+  <div class="card shadow-sm border-0">
+    <div class="card-header bg-white">
+      <h5 class="mb-0 fw-semibold" style="color: #a03e3e;">🔒 Fechar Caixa</h5>
+    </div>
+    <div class="card-body bg-white">
+      <p class="mb-2"><strong>Data de Abertura:</strong> {{ caixa.data_abertura.strftime('%d/%m/%Y %H:%M') }}</p>
+      <p class="mb-2"><strong>Saldo Inicial:</strong> R$ {{ "%.2f"|format(caixa.saldo_inicial or 0) }}</p>
+      <form method="POST">
+        <div class="mb-3">
+          <label for="saldo_final" class="form-label">Saldo Final (R$)</label>
+          <input type="number" name="saldo_final" step="0.01" class="form-control" required>
+        </div>
+        <div class="mb-3">
+          <label for="observacoes" class="form-label">Observações</label>
+          <textarea name="observacoes" class="form-control" rows="3"></textarea>
+        </div>
+        <div class="d-flex justify-content-between mt-3">
+          <a href="{{ url_for('caixa') }}" class="btn btn-secondary">Cancelar</a>
+          <b

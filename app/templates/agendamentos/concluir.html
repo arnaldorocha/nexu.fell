@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-4">
+  <h3>Concluir Agendamento</h3>
+    <form method="POST">
+    <div class="mb-3">
+        <label for="valor_pago">Valor Pago (R$)</label>
+        <input type="number" name="valor_pago" step="0.01" value="{{ agendamento.servico.preco }}" class="form-control" required>
+    </div>
+    <div class="mb-3">
+        <label for="forma_pagamento">Forma de Pagamento</label>
+        <select name="forma_pagamento" class="form-select" required>
+        <option value="pix">Pix</option>
+        <option value="cartao_debito">Cartão Débito</option>
+        <option value="cartao_credito">Cartão Crédito</option>
+        <option value="dinheiro">Dinheiro</option>
+        </select>
+    </div>
+    <button type="submit" class="btn btn-success">Concluir Agendamento</button>
+    </form>
+</div>
+{% endblock %}

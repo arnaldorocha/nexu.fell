@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ 'Editar' if profissional else 'Novo' }} Funcionário{% endblock %}
+
+{% block content %}
+<div class="container mt-4" style="max-width: 600px;">
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-white border-0">
+            <h5 class="mb-0 fw-semibold" style="color: #a03e3e;">
+                {{ 'Editar' if profissional else 'Novo' }} Funcionário
+            </h5>
+        </div>
+        <div class="card-body bg-white">
+            <form method="POST" class="fs-6">
+                <div class="mb-3">
+                    <label for="nome" class="form-label"><i class="fas fa-user me-1"></i> Nome</label>
+                    <input type="text" class="form-control" id="nome" name="nome" required value="{{ profissional.nome if profissional else '' }}">
+                </div>
+                <div class="mb-3">
+                    <label for="especialidades" class="form-label"><i class="fas fa-briefcase me-1"></i> Especialidades</label>
+                    <input type="text" class="form-control" id="especialidades" name="especialidades" value="{{ profissional.especialidades if profissional else '' }}">
+                </div>
+                <div class="mb-3">
+                    <label for="disponibilidade" class="form-label"><i class="fas fa-clock me-1"></i> Disponibilidade</label>
+                    <input type="text" class="form-control" id="disponibilidade" name="disponibilidade" value="{{ profissional.disponibilidade if profissional else '' }}">
+                </div>
+                <div class="mb-3">
+                    <label for="contato" class="form-label"><i class="fas fa-phone me-1"></i> Contato</label>
+                    <input type="text" class="form-control" id="contato" name="contato" value="{{ profissional.contato if profissional else '' }}">
+                </div>
+                <div class="d-flex justify-content-between mt-4">
+                    <a href="{{ url_for('listar_clientes') }}" class="btn btn-secondary" style="background-color: #a03e3e;">Cancelar</a>
+                    <button type="submit" class="btn" style="background-color: #a03e3e; color: white;">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

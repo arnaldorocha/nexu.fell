@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block title %}Abrir Caixa{% endblock %}
+{% block content %}
+<div class="container mt-4" style="max-width: 600px;">
+  <div class="card shadow-sm border-0">
+    <div class="card-header bg-white">
+      <h5 class="mb-0 fw-semibold" style="color: #a03e3e;">🔓 Abrir Caixa</h5>
+    </div>
+    <div class="card-body bg-white">
+      <form method="POST">
+        <div class="mb-3">
+          <label for="saldo_inicial" class="form-label">Saldo Inicial (R$)</label>
+          <input type="number" name="saldo_inicial" step="0.01" class="form-control" required>
+        </div>
+        <div class="d-flex justify-content-between mt-3">
+          <a href="{{ url_for('caixa') }}" class="btn btn-secondary">Cancelar</a>
+          <button type="submit" class="btn btn-success">Abrir Caixa</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

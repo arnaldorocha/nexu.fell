@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% block title %}Caixa{% endblock %}
+
+{% block content %}
+
+{% if caixa_aberto %}
+<div class="alert alert-success d-flex justify-content-between align-items-center">
+  <div>
+    <strong>📂 Caixa aberto</strong> desde {{ caixa_aberto.data_abertura.strftime('%d/%m %H:%M') }} — Saldo Inicial: R$ {{ caixa_aberto.saldo_inicial }}
+  </div>
+  <a href="{{ url_for('fechar_caixa', id=caixa_aberto.id) }}" class="btn btn-sm btn-outline-danger">Fechar Caixa</a>
+</div>
+{% else %}
+<div class="alert alert-warning d-flex justify-content-between align-items-center">
+  <div><strong>⚠ Nenhum caixa aberto no momento.</strong></div>
+  <a href="{{ url_for('abrir_caixa') }}" class="btn btn-sm btn-outline-success">Abrir Caixa</a>
+</div>
+{% endif %}
+
+<div class="container mt-4">
+
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-white d-flex justify-content-between align-items-center">
+            <h5 class="mb-0 fw-semibold" style="color: #a03e3e;">Movimentações de Caixa</h5>
+            <a href="{{ url_for('novo_movimento') }}" class="btn btn-sm" style="color: #a03e3e; border: 1px solid #a03e3e;">
+                <i class="fas fa-plus me-1"></i> Nova Movimentação
+            </a>
+        </div>
+        <div class="card-body">
+
+            <div class="mb-4">
+                <strong class="me-2">Saldo atual:</strong>
+                <span class="fs-5 fw-semibold text-{{ 'success' if saldo >= 0 else 'danger' }}">
+                    R$ {{ saldo }}
+                </span>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-sm align-middle table-hover fs-6">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Tipo</th>
+                            <th>Valor</th>
+                            <th>Descrição</th>
+                            <th>Data</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for m in movimentos %}
+                        <tr>
+                            <td><span class="badge bg-{{ 'success' if m.tipo == 'entrada' else 'danger' }}">{{ m.tipo.capitalize() }}</span></td>
+                            <td>R$ {{ m.valor }}</td>
+                            <td>{{ m.descricao }}</td>
+                            <td>{{ m.data.strftime('%d/%m/%Y %H:%M') }}</td>
+                            <td>
+                                <a href="{{ url_for('editar_movimento', id=m.id) }}" class="btn btn-sm btn-outline-secondary">Editar</a>
+                                <a href="{{ url_for('excluir_movimento', id=m.id) }}" class="btn btn-sm btn-outline-danger" onclick="return confirm('Deseja excluir esta movimentação?')">Excluir</a>
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="5" class="text-muted">Nenhuma movimentação registrada.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+{% endblock %}

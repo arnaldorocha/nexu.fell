@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ 'Editar' if servico else 'Novo' }} Serviço{% endblock %}
+
+{% block content %}
+<div class="container mt-4" style="max-width: 600px;">
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-white border-0">
+            <h5 class="mb-0 fw-semibold" style="color: #a03e3e;">
+                {{ 'Editar' if servico else 'Novo' }} Serviço
+            </h5>
+        </div>
+        <div class="card-body bg-white">
+            <form method="POST" class="fs-6">
+                <div class="mb-3">
+                    <label for="nome" class="form-label"><i class="fas fa-file-alt me-1"></i> Nome</label>
+                    <input type="text" class="form-control" name="nome" required value="{{ servico.nome if servico else '' }}">
+                </div>
+                <div class="mb-3">
+                    <label for="descricao" class="form-label"><i class="fas fa-align-left me-1"></i> Descrição</label>
+                    <textarea class="form-control" name="descricao" rows="3">{{ servico.descricao if servico else '' }}</textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="preco_padrao" class="form-label"><i class="fas fa-dollar-sign me-1"></i> Preço Padrão</label>
+                    <input type="number" step="0.01" class="form-control" name="preco" value="{{ servico.preco_padrao if servico else '' }}">
+                </div>
+
+                <div class="d-flex justify-content-between mt-4">
+                    <a href="{{ url_for('listar_servicos') }}" class="btn btn-secondary" style="background-color: #a03e3e;">Cancelar</a>
+                    <button type="submit" class="btn" style="background-color: #a03e3e; color: white;">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

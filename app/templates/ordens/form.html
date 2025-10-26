@@ -1,0 +1,50 @@
+
+{% extends 'base.html' %}
+{% block title %}{{ 'Editar' if ordem else 'Nova' }} Ordem de Serviço{% endblock %}
+{% block content %}
+<div class="container mt-4" style="max-width: 700px;">
+  <div class="card shadow-sm border-0">
+    <div class="card-header bg-white border-0">
+      <h5 class="mb-0 fw-semibold" style="color: #a03e3e;">
+        {{ 'Editar' if ordem else 'Nova' }} Ordem de Serviço
+      </h5>
+    </div>
+    <div class="card-body bg-white">
+      <form method="POST" class="fs-6">
+        <div class="mb-3">
+          <label for="cliente_id" class="form-label">Cliente</label>
+          <select name="cliente_id" class="form-select" required>
+            {% for c in clientes %}
+              <option value="{{ c.id }}" {% if ordem and ordem.cliente_id == c.id %}selected{% endif %}>{{ c.nome }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="mb-3">
+          <label for="servico_id" class="form-label">Serviço</label>
+          <select name="servico_id" class="form-select" required>
+            {% for s in servicos %}
+              <option value="{{ s.id }}" {% if ordem and ordem.servico_id == s.id %}selected{% endif %}>{{ s.nome }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="mb-3">
+          <label for="descricao" class="form-label">Descrição</label>
+          <textarea class="form-control" name="descricao" rows="3">{{ ordem.descricao if ordem else '' }}</textarea>
+        </div>
+        <div class="mb-3">
+          <label for="status" class="form-label">Status</label>
+          <select name="status" class="form-select">
+            <option value="aberta" {% if ordem and ordem.status == 'aberta' %}selected{% endif %}>Aberta</option>
+            <option value="em andamento" {% if ordem and ordem.status == 'em andamento' %}selected{% endif %}>Em andamento</option>
+            <option value="concluida" {% if ordem and ordem.status == 'concluida' %}selected{% endif %}>Concluída</option>
+          </select>
+        </div>
+        <div class="d-flex justify-content-between mt-4">
+          <a href="{{ url_for('listar_ordens') }}" class="btn btn-secondary" style="background-color: #a03e3e;">Cancelar</a>
+          <button type="submit" class="btn" style="background-color: #a03e3e; color: white;">Salvar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

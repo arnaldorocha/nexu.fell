@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block title %}Ordens de Serviço{% endblock %}
+{% block content %}
+<div class="container mt-4">
+  <div class="card shadow-sm border-0">
+    <div class="card-header bg-white d-flex justify-content-between align-items-center">
+      <h5 class="mb-0 fw-semibold" style="color: #a03e3e;">📦 Ordens de Serviço</h5>
+      <a href="{{ url_for('nova_ordem') }}" class="btn btn-sm" style="color: #a03e3e; border: 1px solid #a03e3e;">
+        <i class="fas fa-plus me-1"></i> Nova Ordem
+      </a>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-sm table-hover align-middle">
+          <thead class="table-light">
+            <tr>
+              <th>Cliente</th>
+              <th>Serviço</th>
+              <th>Status</th>
+              <th>Data</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for ordem in ordens %}
+            <tr>
+              <td>{{ ordem.cliente.nome }}</td>
+              <td>{{ ordem.servico.nome }}</td>
+              <td><span class="badge bg-secondary">{{ ordem.status }}</span></td>
+              <td>{{ ordem.data.strftime('%d/%m/%Y') }}</td>
+              <td class="text-end">
+                <a href="#" class="btn btn-sm btn-outline-secondary">Ver</a>
+              </td>
+            </tr>
+            {% else %}
+            <tr><td colspan="5" class="text-muted">Nenhuma ordem registrada.</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

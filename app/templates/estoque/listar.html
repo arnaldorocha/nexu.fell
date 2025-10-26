@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block title %}Movimentações de Estoque{% endblock %}
+{% block content %}
+<div class="container mt-4">
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-white d-flex justify-content-between align-items-center">
+            <h5 class="mb-0 fw-semibold" style="color: #a03e3e;">📦 Controle de Estoque</h5>
+            <a href="{{ url_for('nova_movimentacao_estoque') }}" class="btn btn-sm" style="color: #a03e3e; border: 1px solid #a03e3e;">
+                <i class="fas fa-plus me-1"></i> Nova Movimentação
+            </a>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-sm table-hover align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Produto</th>
+                            <th>Tipo</th>
+                            <th>Quantidade</th>
+                            <th>Data</th>
+                            <th>Observação</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for mov in movimentacoes %}
+                        <tr>
+                            <td>{{ mov.produto.nome }}</td>
+                            <td><span class="badge bg-{{ 'success' if mov.tipo == 'entrada' else 'danger' }}">{{ mov.tipo }}</span></td>
+                            <td>{{ mov.quantidade }}</td>
+                            <td>{{ mov.data.strftime('%d/%m/%Y %H:%M') }}</td>
+                            <td>{{ mov.observacao }}</td>
+                        </tr>
+                        {% else %}
+                        <tr><td colspan="5" class="text-muted">Nenhuma movimentação registrada.</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

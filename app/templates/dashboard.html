@@ -1,0 +1,273 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<style>
+.sidebar a {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 500;
+    font-size: 1rem;
+}
+.sidebar a i {
+    margin-left: 10px;
+}
+canvas {
+    max-height: 300px;
+}
+</style>
+
+<form method="get" class="mb-4">
+    <label for="periodo">Período:</label>
+    <select name="periodo" id="periodo" onchange="this.form.submit()">
+        <option value="dia" {% if periodo == 'dia' %}selected{% endif %}>Hoje</option>
+        <option value="semana" {% if periodo == 'semana' %}selected{% endif %}>Semana</option>
+        <option value="mes" {% if periodo == 'mes' %}selected{% endif %}>Mês</option>
+        <option value="ano" {% if periodo == 'ano' %}selected{% endif %}>Ano</option>
+        <option value="personalizado" {% if periodo == 'personalizado' %}selected{% endif %}>Personalizado</option>
+    </select>
+    {% if periodo == 'personalizado' %}
+    <br>
+    Data Inicial:
+    <input type="date" name="data_inicio" value="{{ data_inicio|default('') }}">
+    Data Final:
+    <input type="date" name="data_fim" value="{{ data_fim|default('') }}">
+    <button type="submit">Filtrar</button>
+    {% endif %}
+</form>
+
+<div class="container-fluid">
+    <div class="row text-white mb-4">
+        <div class="col-md-3">
+            <div class="card" style="background: linear-gradient(135deg, #cc2b5e, #753a88);">
+                <div class="card-body text-center">
+                    <h6>Agendamentos</h6>
+                    <p class="fs-4">{{ agendamentos|default(0) }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card" style="background: linear-gradient(135deg, #4776E6, #8E54E9);">
+                <div class="card-body text-center">
+                    <h6>Recebimentos</h6>
+                    <p class="fs-4">R$ {{ recebimentos|default(0) }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card" style="background: linear-gradient(135deg, #cb2d3e, #ef473a);">
+                <div class="card-body text-center">
+                    <h6>Comissão</h6>
+                    <p class="fs-4">R$ {{ comissao|default(0) }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card" style="background: linear-gradient(135deg, #833ab4, #fd1d1d);">
+                <div class="card-body text-center">
+                    <h6>Lucro</h6>
+                    <p class="fs-4">R$ {{ lucro|default(0) }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-md-9">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="text-center">Faturamento Mensal</h5>
+                    <canvas id="graficoMensal"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="text-center">Formas de Pagamento</h5>
+                    <canvas id="graficoPagamentos"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+   <div class="row mb-4">
+    <div class="col-md-6 col-lg-3">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="text-center">Funcionários</h5>
+                <canvas id="graficoFuncionario"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 col-lg-3">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="text-center">Serviços</h5>
+                <canvas id="graficoServico"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 col-lg-3">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="text-center">Produtos</h5>
+                <canvas id="graficoProduto"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 col-lg-3">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="text-center">Serviço vs Produto</h5>
+                <canvas id="graficoComparativo"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+Chart.defaults.color = '#333';
+Chart.defaults.plugins.legend.position = 'bottom';
+
+new Chart(document.getElementById('graficoPagamentos'), {
+    type: 'doughnut',
+    data: {
+        labels: ['Pix', 'Cartão Débito', 'Cartão Crédito', 'Dinheiro'],
+        datasets: [{
+            data: {{ formas_pagamento.values()|list|tojson }},
+            backgroundColor: ['#f06292', '#ba68c8', '#64b5f6', '#81c784'],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        cutout: '70%',
+        plugins: {
+            tooltip: {
+                callbacks: {
+                    label: function(context) {
+                        return 'R$ ' + context.parsed.toLocaleString('pt-BR');
+                    }
+                }
+            }
+        }
+    }
+});
+
+new Chart(document.getElementById('graficoMensal'), {
+    type: 'line',
+    data: {
+        labels: {{ meses|tojson }},
+        datasets: [{
+            label: 'Faturamento',
+            data: {{ faturamento_mensal|tojson }},
+            borderColor: '#ec407a',
+            backgroundColor: 'rgba(236, 64, 122, 0.2)',
+            fill: true,
+            tension: 0.4
+        }]
+    },
+    options: {
+        scales: {
+            y: {
+                beginAtZero: true,
+                ticks: {
+                    callback: value => 'R$ ' + value.toLocaleString('pt-BR')
+                }
+            }
+        }
+    }
+});
+
+new Chart(document.getElementById('graficoFuncionario'), {
+    type: 'bar',
+    data: {
+        labels: {{ faturamento_funcionario.keys()|list|tojson }},
+        datasets: [{
+            label: 'Faturamento',
+            data: {{ faturamento_funcionario.values()|list|tojson }},
+            backgroundColor: '#42a5f5'
+        }]
+    },
+    options: {
+        responsive: true,
+        scales: {
+            y: { beginAtZero: true }
+        }
+    }
+});
+
+new Chart(document.getElementById('graficoServico'), {
+    type: 'bar',
+    data: {
+        labels: {{ faturamento_servico.keys()|list|tojson }},
+        datasets: [{
+            label: 'Faturamento',
+            data: {{ faturamento_servico.values()|list|tojson }},
+            backgroundColor: '#66bb6a'
+        }]
+    },
+    options: {
+        responsive: true,
+        indexAxis: 'y',
+        scales: {
+            x: {
+                ticks: {
+                    callback: value => 'R$ ' + value.toLocaleString('pt-BR')
+                }
+            }
+        }
+    }
+});
+
+new Chart(document.getElementById('graficoProduto'), {
+    type: 'bar',
+    data: {
+        labels: {{ faturamento_produto.keys()|list|tojson }},
+        datasets: [{
+            label: 'Faturamento',
+            data: {{ faturamento_produto.values()|list|tojson }},
+            backgroundColor: '#ffa726'
+        }]
+    },
+    options: {
+        responsive: true,
+        indexAxis: 'y',
+        scales: {
+            x: {
+                ticks: {
+                    callback: value => 'R$ ' + value.toLocaleString('pt-BR')
+                }
+            }
+        }
+    }
+});
+
+new Chart(document.getElementById('graficoComparativo'), {
+    type: 'pie',
+    data: {
+        labels: ['Serviços', 'Produtos'],
+        datasets: [{
+            data: {{ comparativo_servico_produto|tojson }},
+            backgroundColor: ['#ab47bc', '#29b6f6']
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            tooltip: {
+                callbacks: {
+                    label: function(context) {
+                        return context.label + ': R$ ' + context.parsed.toLocaleString('pt-BR');
+                    }
+                }
+            }
+        }
+    }
+});
+</script>
+{% endblock %}

@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block title %}Agendamentos{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h4 class="fw-semibold" style="color: #a03e3e;">📅 Agendamentos</h4>
+    <a href="{{ url_for('novo_agendamento') }}" class="btn btn-sm" style="color: #a03e3e; border: 1px solid #a03e3e;">
+      <i class="fas fa-plus me-1"></i> Novo Agendamento
+    </a>
+  </div>
+
+  {% if agendamentos %}
+  <div class="table-responsive">
+    <table class="table table-striped table-hover align-middle">
+      <thead class="table-light">
+        <tr>
+          <th>Cliente</th>
+          <th>Profissional</th>
+          <th>Serviço</th>
+          <th>Data</th>
+          <th>Hora</th>
+          <th>Valor Pago</th>
+          <th>Status</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for ag in agendamentos %}
+        <tr>
+          <td>{{ ag.cliente.nome }}</td>
+          <td>{{ ag.profissional.nome }}</td>
+          <td>{{ ag.servico.nome }}</td>
+          <td>{{ ag.data.strftime('%d/%m/%Y') }}</td>
+          <td>{{ ag.hora }}</td>
+          <td>R$ {{ "%.2f"|format(ag.valor_pago or 0) }}</td>
+          <td>
+            <span class="badge {% if ag.status == 'concluido' %}bg-success{% else %}bg-warning text-dark{% endif %}">
+              {{ ag.status.capitalize() }}
+            </span>
+          </td>
+          <td>
+            <a href="{{ url_for('editar_agendamento', id=ag.id) }}" class="btn btn-sm btn-outline-secondary">Editar</a>
+            <a href="{{ url_for('excluir_agendamento', id=ag.id) }}" class="btn btn-sm btn-outline-danger"
+              onclick="return confirm('Deseja excluir este agendamento?')">Excluir</a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <p class="text-muted">Nenhum agendamento cadastrado ainda.</p>
+  {% endif %}
+</div>
+{% endblock %}

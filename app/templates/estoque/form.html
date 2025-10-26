@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block title %}Nova Movimentação de Estoque{% endblock %}
+{% block content %}
+<div class="container mt-4" style="max-width: 600px;">
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-white border-0">
+            <h5 class="mb-0 fw-semibold" style="color: #a03e3e;">Nova Movimentação de Estoque</h5>
+        </div>
+        <div class="card-body bg-white">
+            <form method="POST">
+                <div class="mb-3">
+                    <label for="produto_id" class="form-label">Produto</label>
+                    <select name="produto_id" class="form-select" required>
+                        {% for p in produtos %}
+                            <option value="{{ p.id }}">{{ p.nome }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="tipo" class="form-label">Tipo</label>
+                    <select name="tipo" class="form-select">
+                        <option value="entrada">Entrada</option>
+                        <option value="saida">Saída</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="quantidade" class="form-label">Quantidade</label>
+                    <input type="number" name="quantidade" class="form-control" required min="1">
+                </div>
+                <div class="mb-3">
+                    <label for="observacao" class="form-label">Observação</label>
+                    <textarea name="observacao" class="form-control" rows="3"></textarea>
+                </div>
+                <div class="d-flex justify-content-between mt-4">
+                    <a href="{{ url_for('listar_movimentacoes_estoque') }}" class="btn btn-secondary" style="background-color: #a03e3e;">Cancelar</a>
+                    <button type="submit" class="btn" style="background-color: #a03e3e; color: white;">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

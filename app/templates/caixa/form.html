@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block title %}{{ 'Editar' if movimento else 'Nova' }} Movimentação{% endblock %}
+{% block content %}
+<div class="container mt-4">
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-white">
+            <h5 class="mb-0 fw-semibold" style="color: #a03e3e;">
+                {{ 'Editar' if movimento else 'Nova' }} Movimentação de Caixa
+            </h5>
+        </div>
+        <div class="card-body">
+            <form method="POST">
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <label for="tipo" class="form-label">Tipo</label>
+                        <select name="tipo" id="tipo" class="form-select" required>
+                            <option value="entrada" {% if movimento and movimento.tipo == 'entrada' %}selected{% endif %}>Entrada</option>
+                            <option value="saida" {% if movimento and movimento.tipo == 'saida' %}selected{% endif %}>Saída</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="valor" class="form-label">Valor</label>
+                        <input type="number" name="valor" id="valor" class="form-control" step="0.01" min="0" value="{{ movimento.valor if movimento else '' }}" required>
+                    </div>
+                    <div class="col-md-12">
+                        <label for="descricao" class="form-label">Descrição</label>
+                        <input type="text" name="descricao" id="descricao" class="form-control" value="{{ movimento.descricao if movimento else '' }}" required>
+                    </div>
+                </div>
+                <div class="col-12 d-flex justify-content-between mt-3">
+                    <a href="{{ url_for('caixa') }}" class="btn btn-outline-secondary">Voltar</a>
+                    <button type="submit" class="btn btn-primary" style="background-color: #a03e3e; border-color: #a03e3e;">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

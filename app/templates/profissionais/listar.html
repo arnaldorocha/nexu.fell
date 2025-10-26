@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block title %}Cadastro{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+
+    <!-- FUNCIONÁRIOS -->
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-white d-flex justify-content-between align-items-center">
+            <h5 class="mb-0 fw-semibold" style="color: #a03e3e;">Funcionários</h5>
+            <a href="{{ url_for('novo_profissional') }}" class="btn btn-sm" style="color: #a03e3e; border: 1px solid #a03e3e;">
+                <i class="fas fa-user-tie me-1"></i> Novo Funcionário
+            </a>
+        </div>
+        <div class="card-body">
+            <div class="row fs-6">
+                {% for profissional in profissionais %}
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card shadow-sm border-0 h-100">
+                        <div class="card-body">
+                            <h6 class="card-title text-success fw-semibold">{{ profissional.nome }}</h6>
+                            <p class="mb-1 text-muted"><i class="fas fa-briefcase me-1"></i> {{ profissional.especialidades }}</p>
+                            <p class="mb-1 text-muted"><i class="fas fa-clock me-1"></i> {{ profissional.disponibilidade }}</p>
+                            <p class="mb-2 text-muted"><i class="fas fa-phone me-1"></i> {{ profissional.contato }}</p>
+                            <div class="d-flex justify-content-end gap-2">
+                                <a href="{{ url_for('editar_profissional', id=profissional.id) }}" class="btn btn-sm btn-outline-secondary">Editar</a>
+                                <a href="{{ url_for('excluir_profissional', id=profissional.id) }}" class="btn btn-sm btn-outline-danger" onclick="return confirm('Deseja excluir este funcionário?')">Excluir</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% else %}
+                <p class="text-muted ms-2">Nenhum funcionário cadastrado.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
