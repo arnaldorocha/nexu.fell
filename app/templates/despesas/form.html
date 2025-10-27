@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block title %}
+{% if despesa %}Editar Despesa{% else %}Nova Despesa{% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4" style="max-width:700px;">
+  <div class="card shadow-sm">
+    <div class="card-header bg-white">
+      <h5 class="mb-0">{% if despesa %}Editar Despesa{% else %}Nova Despesa{% endif %}</h5>
+    </div>
+    <div class="card-body">
+      <form method="POST" action="{% if despesa %}{{ url_for('editar_despesa', id=despesa.id) }}{% else %}{{ url_for('nova_despesa') }}{% endif %}">
+        <div class="mb-3">
+          <label class="form-label">Descrição</label>
+          <input name="descricao" class="form-control" required value="{{ despesa.descricao if despesa else '' }}">
+        </div>
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Valor</label>
+            <input type="number" step="0.01" name="valor" class="form-control" required value="{{ despesa.valor if despesa else '' }}">
+          </div>
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Forma de Pagamento</label>
+            <select name="forma_pagamento" class="form-select" required>
+              <option value="">Selecione</option>
+              <option value="Dinheiro" {% if despesa and despesa.forma_pagamento=='Dinheiro' %}selected{% endif %}>Dinheiro</option>
+              <option value="Cartão" {% if despesa and despesa.forma_pagamento=='Cartão' %}selected{% endif %}>Cartão</option>
+              <option value="Pix" {% if despesa and despesa.forma_pagamento=='Pix' %}selected{% endif %}>Pix</option>
+            </select>
+          </div>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Data</label>
+          <input type="datetime-local" name="data" class="form-control" required value="{{ despesa.data|datetimeformat_local if despesa else '' }}">
+        </div>
+        <div class="d-flex gap-2">
+          <button type="submit" class="btn btn-primary">Salvar</button>
+          <a href="{{ url_for('listar_despesas') }}" class="btn btn-secondary">Cancelar</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

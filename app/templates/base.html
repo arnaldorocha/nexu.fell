@@ -66,6 +66,7 @@
     </style>
 </head>
 <body>
+    
     <div class="sidebar" id="sidebar">
         <div class="text-center py-3">
             <img src="{{ url_for('static', filename='icons/icon.png') }}" alt="Logo">
@@ -82,15 +83,17 @@
         <a href="{{ url_for('caixa') }}" class="{% if active_page == 'caixa' %}active{% endif %}">
         CAIXA <i class="fas fa-cash-register"></i>
         </a>
-        <a href="{{ url_for('listar_movimentacoes_estoque') }}" class="{% if active_page == 'estoque' %}active{% endif %}">
+        <a href="{{ url_for('listar_produtos') }}" class="{% if active_page == 'estoque' %}active{% endif %}">
         ESTOQUE <i class="fas fa-boxes"></i>
         </a>
-        <a href="{{ url_for('login') }}">
+        <a href="{{ url_for('logout') }}">
         SAIR <i class="fas fa-sign-out-alt"></i>
         </a>
         <a href="{{ url_for('pagina_relatorios') }}" class="{% if active_page == 'relatorios' %}active{% endif %}">
-        RELATÓRIOS <i class="fas fa-file-csv"></i>
+        RELATÓRIOS <i class="fas fa-file-word"></i>
         </a>
+
+
 
 </div>
 

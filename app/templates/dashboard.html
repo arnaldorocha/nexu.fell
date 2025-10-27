@@ -19,6 +19,7 @@ canvas {
 }
 </style>
 
+
 <form method="get" class="mb-4">
     <label for="periodo">Período:</label>
     <select name="periodo" id="periodo" onchange="this.form.submit()">
@@ -49,31 +50,18 @@ canvas {
             </div>
         </div>
         <div class="col-md-3">
-            <div class="card" style="background: linear-gradient(135deg, #4776E6, #8E54E9);">
-                <div class="card-body text-center">
-                    <h6>Recebimentos</h6>
-                    <p class="fs-4">R$ {{ recebimentos|default(0) }}</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card" style="background: linear-gradient(135deg, #cb2d3e, #ef473a);">
-                <div class="card-body text-center">
-                    <h6>Comissão</h6>
-                    <p class="fs-4">R$ {{ comissao|default(0) }}</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3">
             <div class="card" style="background: linear-gradient(135deg, #833ab4, #fd1d1d);">
                 <div class="card-body text-center">
-                    <h6>Lucro</h6>
-                    <p class="fs-4">R$ {{ lucro|default(0) }}</p>
+                    <h6>Faturamento Total</h6>
+                    <p class="fs-4">R$ {{ (comparativo_servico_produto[0] + comparativo_servico_produto[1])|float|round(2) }}</p>
                 </div>
             </div>
+            
         </div>
+   
     </div>
 
+    <!-- Gráfico de faturamento mensal -->
     <div class="row mb-4">
         <div class="col-md-9">
             <div class="card">
@@ -83,50 +71,27 @@ canvas {
                 </div>
             </div>
         </div>
-        <div class="col-md-3">
+    </div>
+
+    <!-- Gráficos de Funcionários, Serviços e Produtos -->
+    <div class="row mb-4">
+        <div class="col-md-6 col-lg-3">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="text-center">Formas de Pagamento</h5>
-                    <canvas id="graficoPagamentos"></canvas>
+                    <h5 class="text-center">Funcionários</h5>
+                    <canvas id="graficoFuncionario"></canvas>
                 </div>
             </div>
         </div>
-    </div>
-
-   <div class="row mb-4">
-    <div class="col-md-6 col-lg-3">
-        <div class="card">
-            <div class="card-body">
-                <h5 class="text-center">Funcionários</h5>
-                <canvas id="graficoFuncionario"></canvas>
+        <div class="col-md-6 col-lg-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="text-center">Serviços</h5>
+                    <canvas id="graficoServico"></canvas>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="col-md-6 col-lg-3">
-        <div class="card">
-            <div class="card-body">
-                <h5 class="text-center">Serviços</h5>
-                <canvas id="graficoServico"></canvas>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-6 col-lg-3">
-        <div class="card">
-            <div class="card-body">
-                <h5 class="text-center">Produtos</h5>
-                <canvas id="graficoProduto"></canvas>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-6 col-lg-3">
-        <div class="card">
-            <div class="card-body">
-                <h5 class="text-center">Serviço vs Produto</h5>
-                <canvas id="graficoComparativo"></canvas>
-            </div>
-        </div>
-    </div>
-</div>
+       </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -134,30 +99,7 @@ canvas {
 Chart.defaults.color = '#333';
 Chart.defaults.plugins.legend.position = 'bottom';
 
-new Chart(document.getElementById('graficoPagamentos'), {
-    type: 'doughnut',
-    data: {
-        labels: ['Pix', 'Cartão Débito', 'Cartão Crédito', 'Dinheiro'],
-        datasets: [{
-            data: {{ formas_pagamento.values()|list|tojson }},
-            backgroundColor: ['#f06292', '#ba68c8', '#64b5f6', '#81c784'],
-            borderWidth: 1
-        }]
-    },
-    options: {
-        cutout: '70%',
-        plugins: {
-            tooltip: {
-                callbacks: {
-                    label: function(context) {
-                        return 'R$ ' + context.parsed.toLocaleString('pt-BR');
-                    }
-                }
-            }
-        }
-    }
-});
-
+// Faturamento Mensal
 new Chart(document.getElementById('graficoMensal'), {
     type: 'line',
     data: {
@@ -175,14 +117,13 @@ new Chart(document.getElementById('graficoMensal'), {
         scales: {
             y: {
                 beginAtZero: true,
-                ticks: {
-                    callback: value => 'R$ ' + value.toLocaleString('pt-BR')
-                }
+                ticks: { callback: value => 'R$ ' + value.toLocaleString('pt-BR') }
             }
         }
     }
 });
 
+// Funcionários
 new Chart(document.getElementById('graficoFuncionario'), {
     type: 'bar',
     data: {
@@ -190,17 +131,44 @@ new Chart(document.getElementById('graficoFuncionario'), {
         datasets: [{
             label: 'Faturamento',
             data: {{ faturamento_funcionario.values()|list|tojson }},
-            backgroundColor: '#42a5f5'
+            backgroundColor: function(context) {
+                const value = context.raw;
+                return value > 1000 ? '#1e88e5' : '#42a5f5';
+            },
+            borderSkipped: false,
+            maxBarThickness: 30 // largura da barra
         }]
     },
     options: {
         responsive: true,
+        plugins: {
+            tooltip: {
+                callbacks: {
+                    label: function(context) {
+                        return 'R$ ' + context.raw.toLocaleString('pt-BR');
+                    }
+                }
+            },
+            legend: { display: false }
+        },
         scales: {
-            y: { beginAtZero: true }
-        }
+            y: {
+                beginAtZero: false, // barra não precisa começar do zero
+                grid: { drawBorder: false, color: '#eee' },
+                ticks: {
+                    callback: function(value) {
+                        return 'R$ ' + value.toLocaleString('pt-BR');
+                    },
+                    align: 'start' // valores alinhados à esquerda
+                }
+            },
+            x: { grid: { display: false } }
+        },
+        animation: { duration: 1000, easing: 'easeOutQuart' }
     }
 });
 
+// Serviços (horizontal)
 new Chart(document.getElementById('graficoServico'), {
     type: 'bar',
     data: {
@@ -208,22 +176,46 @@ new Chart(document.getElementById('graficoServico'), {
         datasets: [{
             label: 'Faturamento',
             data: {{ faturamento_servico.values()|list|tojson }},
-            backgroundColor: '#66bb6a'
+            backgroundColor: function(context) {
+                const value = context.raw;
+                return value > 500 ? '#2e7d32' : '#66bb6a';
+            },
+            borderSkipped: false,
+            maxBarThickness: 30
         }]
     },
     options: {
         responsive: true,
         indexAxis: 'y',
+        plugins: {
+            tooltip: {
+                callbacks: {
+                    label: function(context) {
+                        return 'R$ ' + context.raw.toLocaleString('pt-BR');
+                    }
+                }
+            },
+            legend: { display: false }
+        },
         scales: {
             x: {
+                beginAtZero: false,
+                grid: { color: '#eee' },
                 ticks: {
-                    callback: value => 'R$ ' + value.toLocaleString('pt-BR')
+                    callback: function(value) {
+                        return 'R$ ' + value.toLocaleString('pt-BR');
+                    },
+                    align: 'start'
                 }
-            }
-        }
+            },
+            y: { grid: { display: false } }
+        },
+        animation: { duration: 1000, easing: 'easeOutQuart' }
     }
 });
 
+
+// Produtos
 new Chart(document.getElementById('graficoProduto'), {
     type: 'bar',
     data: {
@@ -237,16 +229,11 @@ new Chart(document.getElementById('graficoProduto'), {
     options: {
         responsive: true,
         indexAxis: 'y',
-        scales: {
-            x: {
-                ticks: {
-                    callback: value => 'R$ ' + value.toLocaleString('pt-BR')
-                }
-            }
-        }
+        scales: { x: { ticks: { callback: value => 'R$ ' + value.toLocaleString('pt-BR') } } }
     }
 });
 
+// Serviços x Produtos
 new Chart(document.getElementById('graficoComparativo'), {
     type: 'pie',
     data: {
@@ -271,3 +258,4 @@ new Chart(document.getElementById('graficoComparativo'), {
 });
 </script>
 {% endblock %}
+

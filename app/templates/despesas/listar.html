@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block title %}Despesas{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-white d-flex justify-content-between align-items-center">
+            <h5 class="mb-0 fw-semibold" style="color: #a03e3e;">📄 Despesas</h5>
+            <a href="{{ url_for('nova_despesa') }}" class="btn btn-sm" style="color: #a03e3e; border: 1px solid #a03e3e;">
+                <i class="fas fa-plus me-1"></i> Nova Despesa
+            </a>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                {% for despesa in despesas %}
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card shadow-sm border-0 h-100">
+                        <div class="card-body">
+                            <h6 class="fw-semibold text-primary">{{ despesa.descricao }}</h6>
+                            <p class="mb-1 text-muted"><i class="fas fa-calendar-alt me-1"></i> {{ despesa.data.strftime('%d/%m/%Y %H:%M') if despesa.data else '' }}</p>
+                            <p class="mb-1 text-muted"><i class="fas fa-money-bill-wave me-1"></i> Valor: R$ {{ '%.2f'|format(despesa.valor) }}</p>
+                            <p class="mb-2 text-muted"><i class="fas fa-credit-card me-1"></i> Forma: {{ despesa.forma_pagamento }}</p>
+                            <div class="d-flex justify-content-end gap-2">
+                                <a href="{{ url_for('editar_despesa', id=despesa.id) }}" class="btn btn-sm btn-outline-secondary">Editar</a>
+                                <a href="{{ url_for('excluir_despesa', id=despesa.id) }}" class="btn btn-sm btn-outline-danger" onclick="return confirm('Deseja excluir esta despesa?')">Excluir</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% else %}
+                <p class="text-muted ms-2">Nenhuma despesa cadastrada.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

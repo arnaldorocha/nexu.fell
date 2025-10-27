@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Faturamento por Cliente</title>
+    <style>
+        body { font-family: Arial, sans-serif; font-size: 12px; }
+        h2 { text-align: center; color: #a03e3e; margin-bottom: 20px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { border: 1px solid #000; padding: 5px; text-align: left; }
+        th { background-color: #f2dede; color: #a03e3e; }
+        .text-right { text-align: right; }
+    </style>
+</head>
+<body>
+    <h2>Faturamento por Cliente</h2>
+    <p>Período: {{ inicio.strftime('%d/%m/%Y') }} a {{ fim.strftime('%d/%m/%Y') }}</p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Cliente</th>
+                <th>Total Recebido (R$)</th>
+                <th>Quantidade de Serviços</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for ag in agendamentos %}
+            <tr>
+                <td>{{ ag.nome }}</td>
+                <td class="text-right">{{ "%.2f"|format(ag.total or 0) }}</td>
+                <td class="text-right">{{ ag.qtd }}</td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="3" class="text-center">Nenhum faturamento encontrado no período</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

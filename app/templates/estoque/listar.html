@@ -1,42 +1,33 @@
 {% extends 'base.html' %}
-{% block title %}Movimentações de Estoque{% endblock %}
+{% block title %}Estoque{% endblock %}
 {% block content %}
 <div class="container mt-4">
-    <div class="card shadow-sm border-0">
-        <div class="card-header bg-white d-flex justify-content-between align-items-center">
-            <h5 class="mb-0 fw-semibold" style="color: #a03e3e;">📦 Controle de Estoque</h5>
-            <a href="{{ url_for('nova_movimentacao_estoque') }}" class="btn btn-sm" style="color: #a03e3e; border: 1px solid #a03e3e;">
-                <i class="fas fa-plus me-1"></i> Nova Movimentação
-            </a>
-        </div>
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h5>Estoque disponível</h5>
+    <a href="{{ url_for('nova_movimentacao_estoque') }}" class="btn btn-sm btn-outline-primary">Nova movimentação</a>
+  </div>
+
+  {% if produtos %}
+  <div class="row">
+    {% for p in produtos %}
+    <div class="col-md-6 col-lg-4 mb-3">
+      <div class="card h-100">
         <div class="card-body">
-            <div class="table-responsive">
-                <table class="table table-sm table-hover align-middle">
-                    <thead class="table-light">
-                        <tr>
-                            <th>Produto</th>
-                            <th>Tipo</th>
-                            <th>Quantidade</th>
-                            <th>Data</th>
-                            <th>Observação</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for mov in movimentacoes %}
-                        <tr>
-                            <td>{{ mov.produto.nome }}</td>
-                            <td><span class="badge bg-{{ 'success' if mov.tipo == 'entrada' else 'danger' }}">{{ mov.tipo }}</span></td>
-                            <td>{{ mov.quantidade }}</td>
-                            <td>{{ mov.data.strftime('%d/%m/%Y %H:%M') }}</td>
-                            <td>{{ mov.observacao }}</td>
-                        </tr>
-                        {% else %}
-                        <tr><td colspan="5" class="text-muted">Nenhuma movimentação registrada.</td></tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
+          <h6 class="card-title">{{ p.nome }}</h6>
+          <p class="mb-1 text-muted">{{ p.descricao }}</p>
+          <p class="fw-bold">Qtd: {{ p.quantidade }}</p>
+          <div class="d-flex justify-content-end gap-2">
+            <a href="{{ url_for('editar_produto', id=p.id) }}" class="btn btn-sm btn-outline-secondary">Editar</a>
+            <a href="{{ url_for('excluir_produto', id=p.id) }}" class="btn btn-sm btn-outline-danger" onclick="return confirm('Excluir produto?')">Excluir</a>
+            <a href="{{ url_for('configurar_estoque', produto_id=p.id) }}" class="btn btn-sm btn-outline-success">Configurar</a>
+          </div>
         </div>
+      </div>
     </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <p class="text-muted">Nenhum produto em estoque.</p>
+  {% endif %}
 </div>
 {% endblock %}

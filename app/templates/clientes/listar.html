@@ -5,110 +5,147 @@
 {% block content %}
 <div class="container mt-4">
 
-    <!-- CLIENTES -->
-    <div class="card mb-5 shadow-sm border-0">
-        <div class="card-header bg-white d-flex justify-content-between align-items-center">
-            <h5 class="mb-0 fw-semibold" style="color: #a03e3e;">Clientes</h5>
-            <a href="{{ url_for('novo_cliente') }}" class="btn btn-sm" style="color: #a03e3e; border: 1px solid #a03e3e;">
-                <i class="fas fa-user-plus me-1"></i> Novo Cliente
-            </a>
+  <!-- CLIENTES -->
+  <div class="card mb-5 shadow-sm border-0">
+    <div class="card-header bg-white d-flex justify-content-between align-items-center">
+      <h5 class="mb-0 fw-semibold" style="color: #a03e3e;">Clientes</h5>
+      <a href="{{ url_for('novo_cliente') }}" class="btn btn-sm" style="color: #a03e3e; border: 1px solid #a03e3e;">
+        <i class="fas fa-user-plus me-1"></i> Novo Cliente
+      </a>
+    </div>
+    <div class="card-body">
+      <div class="row fs-6">
+        {% for cliente in clientes %}
+        <div class="col-md-6 col-lg-4 mb-4">
+          <div class="card shadow-sm border-0 h-100">
+            <div class="card-body">
+              <h6 class="card-title text-primary fw-semibold">{{ cliente.nome }}</h6>
+              <p class="mb-1 text-muted"><i class="fas fa-phone-alt me-1"></i> {{ cliente.telefone }}</p>
+              <p class="mb-2 text-muted"><i class="fas fa-envelope me-1"></i> {{ cliente.email }}</p>
+              {% for ag in cliente.agendamentos %}
+              <p class="mb-1 text-muted"><i class="fas fa-cut me-1"></i> Serviço: {{ ag.servico.nome }}</p>
+              {% endfor %}
+              <div class="d-flex justify-content-end gap-2">
+                <a href="{{ url_for('editar_cliente', id=cliente.id) }}" class="btn btn-sm btn-outline-secondary">Editar</a>
+                <a href="{{ url_for('excluir_cliente', id=cliente.id) }}" class="btn btn-sm btn-outline-danger" onclick="return confirm('Deseja excluir este cliente?')">Excluir</a>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="card-body">
-            <div class="row fs-6">
-                {% for cliente in clientes %}
-                <div class="col-md-6 col-lg-4 mb-4">
-                    <div class="card shadow-sm border-0 h-100">
-                        <div class="card-body">
-                            <h6 class="card-title text-primary fw-semibold">{{ cliente.nome }}</h6>
-                            <p class="mb-1 text-muted"><i class="fas fa-phone-alt me-1"></i> {{ cliente.telefone }}</p>
-                            <p class="mb-2 text-muted"><i class="fas fa-envelope me-1"></i> {{ cliente.email }}</p>
-                                <p class="mb-2 text-muted"><i class="fas fa-envelope me-1"></i> {{ cliente.email }}</p>
+        {% else %}
+        <p class="text-muted ms-2">Nenhum cliente cadastrado.</p>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
 
-                            {% for ag in cliente.agendamentos %}
-                                <p class="mb-1 text-muted"><i class="fas fa-cut me-1"></i> Serviço: {{ ag.servico.nome }}</p>
-                            {% endfor %}
+  <!-- FUNCIONÁRIOS -->
+  <div class="card mb-5 shadow-sm border-0">
+    <div class="card-header bg-white d-flex justify-content-between align-items-center">
+      <h5 class="mb-0 fw-semibold" style="color: #a03e3e;">Funcionários</h5>
+      <a href="{{ url_for('novo_profissional') }}" class="btn btn-sm" style="color: #a03e3e; border: 1px solid #a03e3e;">
+        <i class="fas fa-user-tie me-1"></i> Novo Funcionário
+      </a>
+    </div>
+    <div class="card-body">
+      <div class="row fs-6">
+        {% for profissional in profissionais %}
+        <div class="col-md-6 col-lg-4 mb-4">
+          <div class="card shadow-sm border-0 h-100">
+            <div class="card-body">
+              <h6 class="card-title text-success fw-semibold">{{ profissional.nome }}</h6>
+              <p class="mb-1 text-muted"><i class="fas fa-briefcase me-1"></i> {{ profissional.especialidades }}</p>
+              <p class="mb-1 text-muted"><i class="fas fa-clock me-1"></i> {{ profissional.disponibilidade }}</p>
+              <p class="mb-2 text-muted"><i class="fas fa-phone me-1"></i> {{ profissional.contato }}</p>
+              <div class="d-flex justify-content-end gap-2">
+                <a href="{{ url_for('editar_profissional', id=profissional.id) }}" class="btn btn-sm btn-outline-secondary">Editar</a>
+                <a href="{{ url_for('excluir_profissional', id=profissional.id) }}" class="btn btn-sm btn-outline-danger" onclick="return confirm('Deseja excluir este funcionário?')">Excluir</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% else %}
+        <p class="text-muted ms-2">Nenhum funcionário cadastrado.</p>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
 
-                            <div class="d-flex justify-content-end gap-2">
-                                <a href="{{ url_for('editar_cliente', id=cliente.id) }}" class="btn btn-sm btn-outline-secondary">Editar</a>
-                                <a href="{{ url_for('excluir_cliente', id=cliente.id) }}" class="btn btn-sm btn-outline-danger" onclick="return confirm('Deseja excluir este cliente?')">Excluir</a>
-                            </div>
+  <!-- SERVIÇOS -->
+  <div class="card mb-5 shadow-sm border-0">
+    <div class="card-header bg-white d-flex justify-content-between align-items-center">
+      <h5 class="mb-0 fw-semibold" style="color: #a03e3e;">📄 Serviços</h5>
+      <a href="{{ url_for('novo_servico') }}" class="btn btn-sm" style="color: #a03e3e; border: 1px solid #a03e3e;">
+        <i class="fas fa-plus me-1"></i> Novo Serviço
+      </a>
+    </div>
+    <div class="card-body">
+      <div class="row">
+        {% for servico in servicos %}
+        <div class="col-md-6 col-lg-4 mb-4">
+          <div class="card shadow-sm border-0 h-100">
+            <div class="card-body">
+              <h6 class="fw-semibold text-primary">{{ servico.nome }}</h6>
+              <p class="text-muted">{{ servico.descricao }}</p>
+              <p class="fw-bold text-success">R$ {{ servico.preco_padrao }}</p>
+              <div class="d-flex justify-content-end gap-2">
+                <a href="{{ url_for('editar_servico', id=servico.id) }}" class="btn btn-sm btn-outline-secondary">Editar</a>
+                <a href="{{ url_for('excluir_servico', id=servico.id) }}" class="btn btn-sm btn-outline-danger" onclick="return confirm('Excluir este serviço?')">Excluir</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% else %}
+        <p class="text-muted ms-2">Nenhum serviço cadastrado.</p>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+ <!-- DESPESAS -->
+<div class="card shadow-sm border-0">
+    <div class="card-header d-flex justify-content-between align-items-center bg-white">
+        <h5 class="mb-0 fw-semibold" style="color:#a03e3e;">📄 Despesas</h5>
+        <a href="{{ url_for('nova_despesa') }}" class="btn btn-sm" style="color:#a03e3e;border:1px solid #a03e3e;">
+            <i class="fas fa-plus me-1"></i> Nova Despesa
+        </a>
+    </div>
+    <div class="card-body">
+        <p class="fw-bold text-danger mb-3">Total: R$ {{ '%.2f'|format(total_despesas) }}</p> <!-- Aqui mostra o total -->
+        <div class="row fs-6">
+            {% for despesa in despesas %}
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card shadow-sm border-0 h-100">
+                    <div class="card-body">
+                        <h6 class="fw-semibold text-primary">{{ despesa.descricao }}</h6>
+                        <p class="mb-1 text-muted"><i class="fas fa-calendar-alt me-1"></i> {{ despesa.data.strftime('%d/%m/%Y %H:%M') if despesa.data else '' }}</p>
+                        <p class="mb-1 text-muted"><i class="fas fa-money-bill-wave me-1"></i> Valor: R$ {{ '%.2f'|format(despesa.valor) }}</p>
+                        <p class="mb-2 text-muted"><i class="fas fa-credit-card me-1"></i> Forma: {{ despesa.forma_pagamento }}</p>
+                        <div class="d-flex justify-content-end gap-2">
+                            <a href="{{ url_for('editar_despesa', id=despesa.id) }}" class="btn btn-sm btn-outline-secondary">Editar</a>
+                            <a href="{{ url_for('excluir_despesa', id=despesa.id) }}" class="btn btn-sm btn-outline-danger" onclick="return confirm('Deseja excluir esta despesa?')">Excluir</a>
                         </div>
                     </div>
                 </div>
-                {% else %}
-                <p class="text-muted ms-2">Nenhum cliente cadastrado.</p>
-                {% endfor %}
             </div>
+            {% else %}
+            <p class="text-muted ms-2">Nenhuma despesa cadastrada.</p>
+            {% endfor %}
         </div>
     </div>
-
-    <!-- FUNCIONÁRIOS -->
-    <div class="card shadow-sm border-0">
-        <div class="card-header bg-white d-flex justify-content-between align-items-center">
-            <h5 class="mb-0 fw-semibold" style="color: #a03e3e;">Funcionários</h5>
-            <a href="{{ url_for('novo_profissional') }}" class="btn btn-sm" style="color: #a03e3e; border: 1px solid #a03e3e;">
-                <i class="fas fa-user-tie me-1"></i> Novo Funcionário
-            </a>
-        </div>
-        <div class="card-body">
-            <div class="row fs-6">
-                {% for profissional in profissionais %}
-                <div class="col-md-6 col-lg-4 mb-4">
-                    <div class="card shadow-sm border-0 h-100">
-                        <div class="card-body">
-                            <h6 class="card-title text-success fw-semibold">{{ profissional.nome }}</h6>
-                            <p class="mb-1 text-muted"><i class="fas fa-briefcase me-1"></i> {{ profissional.especialidades }}</p>
-                            <p class="mb-1 text-muted"><i class="fas fa-clock me-1"></i> {{ profissional.disponibilidade }}</p>
-                            <p class="mb-2 text-muted"><i class="fas fa-phone me-1"></i> {{ profissional.contato }}</p>
-                            <div class="d-flex justify-content-end gap-2">
-                                <a href="{{ url_for('editar_profissional', id=profissional.id) }}" class="btn btn-sm btn-outline-secondary">Editar</a>
-                                <a href="{{ url_for('excluir_profissional', id=profissional.id) }}" class="btn btn-sm btn-outline-danger" onclick="return confirm('Deseja excluir este funcionário?')">Excluir</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                {% else %}
-                <p class="text-muted ms-2">Nenhum funcionário cadastrado.</p>
-                {% endfor %}
-            </div>
-        </div>
-    </div>
-
-
-    <!-- SERVICOS -->
-      
-<div class="container mt-4">
-
-    <div class="card shadow-sm border-0">
-        <div class="card-header bg-white d-flex justify-content-between align-items-center">
-            <h5 class="mb-0 fw-semibold" style="color: #a03e3e;">📄 Serviços</h5>
-            <a href="{{ url_for('novo_servico') }}" class="btn btn-sm" style="color: #a03e3e; border: 1px solid #a03e3e;">
-                <i class="fas fa-plus me-1"></i> Novo Serviço
-            </a>
-        </div>
-        <div class="card-body">
-            <div class="row">
-                {% for servico in servicos %}
-                <div class="col-md-6 col-lg-4 mb-4">
-                    <div class="card shadow-sm border-0 h-100">
-                        <div class="card-body">
-                            <h6 class="fw-semibold text-primary">{{ servico.nome }}</h6>
-                            <p class="text-muted">{{ servico.descricao }}</p>
-                            <p class="fw-bold text-success">R$ {{ servico.preco_padrao }}</p>
-                            <div class="d-flex justify-content-end gap-2">
-                                <a href="{{ url_for('editar_servico', id=servico.id) }}" class="btn btn-sm btn-outline-secondary">Editar</a>
-                                <a href="{{ url_for('excluir_servico', id=servico.id) }}" class="btn btn-sm btn-outline-danger" onclick="return confirm('Excluir este serviço?')">Excluir</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                {% else %}
-                <p class="text-muted ms-2">Nenhum serviço cadastrado.</p>
-                {% endfor %}
-            </div>
-        </div>
-    </div>
-
 </div>
+
+<div class="card shadow-sm border-0">
+        <p class="mt-3 text-center">
+          <div class="card-header d-flex justify-content-between align-items-center bg-white">
+        <h5 class="mb-0 fw-semibold" style="color:#a03e3e;"></h5>
+{% if current_user.is_authenticated and current_user.role == 'admin' %}
+<a href="{{ url_for('listar_usuarios') }}" class="btn btn-warning mb-3">Administração de Usuários</a>
+{% endif %}
+    </div>
+</div>
+
+
+
 </div>
 {% endblock %}

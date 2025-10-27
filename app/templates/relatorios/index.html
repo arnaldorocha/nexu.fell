@@ -1,14 +1,16 @@
 {% extends 'base.html' %}
-{% block title %}Relatórios{% endblock %}
-{% block content %}
 
+{% block title %}Relatórios{% endblock %}
+
+{% block content %}
 <div class="container mt-4" style="max-width: 750px;">
   <div class="card shadow-sm border-0">
     <div class="card-header bg-white">
-      <h5 class="mb-0 fw-semibold" style="color: #a03e3e;">📊 Relatórios em CSV</h5>
+      <h5 class="mb-0 fw-semibold" style="color: #a03e3e;">Relatórios</h5>
     </div>
     <div class="card-body">
 
+      <!-- Filtro por datas -->
       <form method="get" class="row g-3 mb-4">
         <div class="col-md-5">
           <label for="data_inicio" class="form-label">Data Início</label>
@@ -23,15 +25,15 @@
         </div>
       </form>
 
-      <div class="d-grid gap-3">
-        <a href="{{ url_for('exportar_faturamento_csv', data_inicio=data_inicio, data_fim=data_fim) }}" class="btn btn-outline-primary">💰 Faturamento</a>
-        <a href="{{ url_for('exportar_servicos_csv', data_inicio=data_inicio, data_fim=data_fim) }}" class="btn btn-outline-success">💇‍♀️ Serviços Realizados</a>
-        <a href="{{ url_for('exportar_vendas_produtos_csv', data_inicio=data_inicio, data_fim=data_fim) }}" class="btn btn-outline-warning">📦 Vendas de Produtos</a>
-        <a href="{{ url_for('exportar_lucro_csv', data_inicio=data_inicio, data_fim=data_fim) }}" class="btn btn-outline-danger">📈 Lucro Real</a>
+      <!-- Botões PDF -->
+      <div class="d-grid gap-2">
+        <h6>Exportar PDF</h6>
+        <a href="{{ url_for('relatorio_faturamento_geral_pdf', data_inicio=data_inicio, data_fim=data_fim) }}" class="btn btn-outline-dark">Faturamento Geral</a>
+        <a href="{{ url_for('relatorio_faturamento_por_cliente_pdf', data_inicio=data_inicio, data_fim=data_fim) }}" class="btn btn-outline-secondary">Faturamento por Cliente</a>
+        <a href="{{ url_for('relatorio_faturamento_por_servico_pdf', data_inicio=data_inicio, data_fim=data_fim) }}" class="btn btn-outline-info">Faturamento por Serviço</a>
       </div>
 
     </div>
   </div>
 </div>
-
 {% endblock %}

@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block title %}{% if usuario %}Editar Usuário{% else %}Novo Usuário{% endif %}{% endblock %}
+{% block content %}
+<div class="container mt-4" style="max-width:600px;">
+  <div class="card shadow-sm">
+    <div class="card-header bg-white"><h5 class="mb-0">{% if usuario %}Editar Usuário{% else %}Novo Usuário{% endif %}</h5></div>
+    <div class="card-body">
+      <form method="post">
+        <div class="mb-3">
+          <label class="form-label">Username</label>
+          <input name="username" class="form-control" required value="{{ usuario.username if usuario else '' }}">
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Senha {% if usuario %}(deixe em branco para manter){% endif %}</label>
+          <input name="senha" type="password" class="form-control">
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Perfil</label>
+        <select name="role" class="form-control" {% if usuario and usuario.id == current_user.id %}disabled{% endif %}>
+            <option value="admin" {% if usuario and usuario.role=='admin' %}selected{% endif %}>Admin</option>
+            <option value="comum" {% if usuario and usuario.role=='comum' %}selected{% endif %}>Comum</option>
+        </select>
+        </div>
+        <div class="d-flex gap-2">
+          <button class="btn btn-primary">Salvar</button>
+          <a href="{{ url_for('listar_usuarios') }}" class="btn btn-secondary">Cancelar</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

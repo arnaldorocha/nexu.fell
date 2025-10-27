@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block title %}Configurar Estoque{% endblock %}
+{% block content %}
+<div class="container mt-4" style="max-width:600px;">
+  <h5>Configurar Estoque - {{ produto.nome }}</h5>
+  <p>Quantidade atual: <strong>{{ produto.quantidade }}</strong></p>
+  <form method="post">
+    <div class="mb-3">
+      <label class="form-label">Tipo</label>
+      <select name="tipo" class="form-control">
+        <option value="entrada">Entrada</option>
+        <option value="saida">Saída</option>
+      </select>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Quantidade</label>
+      <input name="quantidade" class="form-control" type="number" min="1" required>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Observação</label>
+      <input name="observacao" class="form-control">
+    </div>
+    <button class="btn btn-primary">Salvar</button>
+    <a href="{{ url_for('estoque') }}" class="btn btn-secondary">Cancelar</a>
+  </form>
+</div>
+{% endblock %}

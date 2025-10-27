@@ -1,4 +1,0 @@
-Flask
-python-dotenv
-xhtml2pdf
-Werkzeug

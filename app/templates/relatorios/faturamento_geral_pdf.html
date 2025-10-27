@@ -1,0 +1,25 @@
+<h2>Relatório de Faturamento Geral</h2>
+<p>Período: {{ inicio }} até {{ fim }}</p>
+
+<table border="1" cellspacing="0" cellpadding="5">
+    <tr>
+        <th>Data</th>
+        <th>Tipo</th>
+        <th>Forma de Pagamento</th>
+        <th>Descrição</th>
+        <th>Valor (R$)</th>
+    </tr>
+    {% for mov in relatorio %}
+    <tr>
+        <td>{{ mov.data.strftime("%d/%m/%Y %H:%M") }}</td>
+        <td>{{ mov.tipo|capitalize }}</td>
+        <td>{{ mov.forma_pagamento or '-' }}</td>
+        <td>{{ mov.descricao or '-' }}</td>
+        <td>{{ "%.2f"|format(mov.valor) }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+<h3>Total de Entradas: R$ {{ "%.2f"|format(total_entradas) }}</h3>
+<h3>Total de Saídas: R$ {{ "%.2f"|format(total_saidas) }}</h3>
+<h2>Lucro: R$ {{ "%.2f"|format(lucro) }}</h2>

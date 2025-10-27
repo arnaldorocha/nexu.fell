@@ -1,10 +1,41 @@
-<h1>{{ 'Editar' if produto else 'Novo' }} Produto</h1>
-<form method="POST">
-    <input name="nome" placeholder="Nome" value="{{ produto.nome if produto else '' }}"><br>
-    <input name="descricao" placeholder="Descrição" value="{{ produto.descricao if produto else '' }}"><br>
-    <input name="preco" placeholder="Preço" type="number" step="0.01" value="{{ produto.preco if produto else '' }}"><br>
-    <input name="quantidade" placeholder="Quantidade" type="number" value="{{ produto.quantidade if produto else '' }}"><br>
-    <input name="quantidade_minima" placeholder="Qtd. Mínima" type="number" value="{{ produto.quantidade_minima if produto else '' }}"><br>
-    <button type="submit">Salvar</button>
-</form>
-<a href="{{ url_for('listar_produtos') }}">Voltar</a>
+{% extends 'base.html' %}
+{% block title %}{% if produto %}Editar Produto{% else %}Novo Produto{% endif %}{% endblock %}
+{% block content %}
+<div class="container mt-4" style="max-width:700px;">
+  <div class="card shadow-sm">
+    <div class="card-header bg-white">
+      <h5 class="mb-0">{% if produto %}Editar Produto{% else %}Novo Produto{% endif %}</h5>
+    </div>
+    <div class="card-body">
+      <form method="post">
+        <div class="mb-3">
+          <label class="form-label">Nome</label>
+          <input name="nome" class="form-control" required value="{{ produto.nome if produto else '' }}">
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Descrição</label>
+          <textarea name="descricao" class="form-control">{{ produto.descricao if produto else '' }}</textarea>
+        </div>
+        <div class="row">
+          <div class="col-md-4 mb-3">
+            <label class="form-label">Preço</label>
+            <input name="preco" class="form-control" required value="{{ produto.preco if produto else '' }}">
+          </div>
+          <div class="col-md-4 mb-3">
+            <label class="form-label">Quantidade</label>
+            <input name="quantidade" type="number" class="form-control" value="{{ produto.quantidade if produto else 0 }}">
+          </div>
+          <div class="col-md-4 mb-3">
+            <label class="form-label">Qtd Mínima</label>
+            <input name="quantidade_minima" type="number" class="form-control" value="{{ produto.quantidade_minima if produto else 0 }}">
+          </div>
+        </div>
+        <div class="d-flex gap-2">
+          <button class="btn btn-primary">Salvar</button>
+          <a href="{{ url_for('listar_produtos') }}" class="btn btn-secondary">Cancelar</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}
